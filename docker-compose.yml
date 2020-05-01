@@ -1,0 +1,44 @@
+version: '3'
+services:
+      mydbos:
+        image: mysql:5.7
+        restart: always
+        volumes:
+             - my_sql_storage:/var/lib/mysql
+        environment:
+             MYSQL_PASSWORD: rootpass
+             MYSQL_USER: dinesh
+             MySQL_PASSWORD: redhat
+             MYSQL_DATABASE: mydb
+       
+      mywpos:
+        image: wordpress:5.1.1-php7.3-apache
+        restart: always
+        depends_on:
+             - mydbos
+        volumes: 
+             - word_press_storage:/var/www/html
+        ports:
+             - 8082:80
+
+      myphpadmin:
+        image: phpmyadmin/phpmyadmin:latest 
+        restart: always
+        depends_on:
+             - mydbos
+        environment:
+             MYSQL_ROOT_PASSWORD: rootpass
+             MYSQL_USER: dinesh
+             MYSQL_PASSWORD: redhat
+             PMA_HOST: mydbos
+             PMA_PORT: 3306
+        ports:
+             - 8081:80
+
+volumes:
+     my_sql_storage:
+     word_press_storage:
+
+
+   
+       
